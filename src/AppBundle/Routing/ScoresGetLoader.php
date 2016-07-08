@@ -5,6 +5,7 @@ namespace AppBundle\Routing;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use AppBundle\Utils;
 
 class ScoresGetLoader extends Loader {
   private $loaded = false;
@@ -44,47 +45,26 @@ class ScoresGetLoader extends Loader {
       )
     );
 
-  }
+    $indicesList = Utils.permutations(range(0, sizeof($components) - 1),
+                                      sizeof($components));
+    foreach ($indicesList as $i => $indices) {
+      $routeName = "get_$i";
+      $parts = array_map(function ($i) { return $components[$i]; }, $indices);
+      $path = '';
+      $defaults = array( '_controller' => $controller );
+      $requirements = array();
 
-  /* 
-   * Generate all permutations of elements from a set up to a given length.
-   */
-  private function permutations($set, $length) {
-    // If generating single-length elements, just wrap each element as an array
-    // and return.
-    if ($length === 1) {
-      $wrapped = array();
-
-      for ($i = 0; $i < sizeof($set); $i++) {
-        array_push($wrapped, array($set[$i]));
+      foreach ($parts as $part) {
+        $path = $path . $part['path'];
+        $defaults = array_merge($defaults, $part['defaults']);
+        $requirements = array_merge($requirements, $part['requirements']);
       }
 
-      return $wrapped;
+      $route = new Route($path, $defaults, $requirements);
+      $routes->add($routeName, $route);
     }
 
-    // Length greater than 1, recurse.
-    $subperms = permutations($set, $length - 1);
-    // Carry forward elements from recursion.
-    $perms = $subperms;
-
-    // Take each element from the set, insert into each position in each 
-    // subpermutation where the subpermutation doesn't already include said 
-    // element.
-    for ($i = 0; $i < sizeof($set); $i++) {
-      for ($j = 0; $j < sizeof($subperms); $j++) {
-        if (!in_array($set[$i], $subperms[$j])) {
-          for ($k = 0; $k <= sizeof($subperms[$j]); $k++) {
-            $copy = $subperms[$j];
-            array_splice($copy, $k, 0, $set[$i]);
-            // Don't duplicate permutations.
-            if (!in_array($copy, $perms)) {
-              array_push($perms, $copy);
-            }
-          }
-        }
-      }
-    }
-
-    return $perms;
+    $this->loaded = true;
+    return $routes;
   }
 }
