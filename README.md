@@ -23,8 +23,8 @@ is not part of the data model.
   is case-sensitive.
 * **GET** `/difficulty/:difficulty` - Retrieve scores at specified difficulty.
   Parameter is case-insensitive.
-* **GET** `/sort_by/:first_field(/:second_field)` - Sort the results by up to 
-  two fields. Fields are `name`, `difficulty`, and `score`.
+* **GET** `/sort_by/:sort_field` - Sort the results by a specified field. Valid 
+  fields are `name`, `difficulty`, and `score`.
 
 All above **GET** endpoints are composable, so you can query for
 `/difficulty/hard/num/20/sort_by/name`
@@ -34,6 +34,10 @@ to get the top 20 scores for hard mode, sorted by name.
   parameters and adds the score to the database.
 * **DELETE** `/score/:id` - Deletes the score with ID `id`. This requires that 
   the user is authenticated as an admin.
+
+All endpoints return a HTML document by default, but if the header
+`Accept: application/json`
+is set then a JSON array is returned instead.
 
 
 ## Notes
