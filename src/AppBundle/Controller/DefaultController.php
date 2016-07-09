@@ -13,6 +13,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-      return $this->forward('AppBundle:ScoresGet:get');
+      return $this->forward('AppBundle:ScoresGet:get', array(
+        'n' => 10, 'name' => '', 'difficulty' => '', 'sort_field' => 'score' ));
     }
 }
