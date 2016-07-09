@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <table class="results-table">
+    <tr><th>Rank</th><th>Name</th><th>Difficulty</th><th>Score</th></tr>
+    {% for rank, result in results %}
+      <tr><td>{{ rank }}</td><td>{{ result.name }}</td><td>{{ result.difficulty|capitalize }}</td><td>{{ result.score }}</td></tr>
+    {% endfor %}
+  </table>
+{% endblock %}
