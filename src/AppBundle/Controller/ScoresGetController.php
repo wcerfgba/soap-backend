@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class ScoresGetController extends Controller {
-  public function getAction($n, $name, $difficulty, $sort_field) {
+  public function getAction($n = 10, $name = '', $difficulty = '', $sort_field = 'score', Request $request) {
     $format = $request->getRequestFormat();
 
     $repository = $this->getDoctrine()->getRepository('AppBundle:Score');
@@ -34,7 +34,15 @@ class ScoresGetController extends Controller {
         return 0;
       }
 
-      return ($a[$sort_field] < $b[$sort_field]) ? -1 : 1;
+      if ($sort_field === 'score') {
+        return ($a[$sort_field] > $b[$sort_field]) ? -1 : 1;
+      } else if ($sort_field === 'difficulty') {
+        $cmp = array( 'easy', 'medium', 'hard' );
+        return (array_search($a[$sort_field], $cmp) >
+                array_search($b[$sort_field], $cmp)) ? -1 : 1;
+      } else {
+        return ($a[$sort_field] < $b[$sort_field]) ? -1 : 1;
+      } 
     });
 
     return $this->render("results.$format.twig", array(
