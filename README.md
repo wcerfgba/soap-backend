@@ -49,3 +49,8 @@ is set then a JSON array is returned instead.
    score, or if the data model has to be extended with a login name which is 
    then the target of the authorisation check. Proper implementation of this 
    feature requires reference to the rest of the system.
+
+2. At commit `a99fc73` it was necessary to add default values to the parameters
+   of function `ScoresGetController::getAction`, because for some reason the 
+   default values specified on the routes were not being carried forward to the 
+   controller. I am not currently sure why this is.
