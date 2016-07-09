@@ -2,11 +2,11 @@
 
 namespace AppBundle;
 
-class Utils {
+class Util {
   /* 
    * Generate all permutations of elements from a set up to a given length.
    */
-  public function permutations($set, $length) {
+  public static function permutations($set, $length) {
     // If generating single-length elements, just wrap each element as an array
     // and return.
     if ($length === 1) {
@@ -20,7 +20,7 @@ class Utils {
     }
 
     // Length greater than 1, recurse.
-    $subperms = permutations($set, $length - 1);
+    $subperms = Util::permutations($set, $length - 1);
     // Carry forward elements from recursion.
     $perms = $subperms;
 

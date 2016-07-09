@@ -5,7 +5,7 @@ namespace AppBundle\Routing;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
-use AppBundle\Utils;
+use AppBundle\Util;
 
 class ScoresGetLoader extends Loader {
   private $loaded = false;
@@ -45,11 +45,15 @@ class ScoresGetLoader extends Loader {
       )
     );
 
-    $indicesList = Utils.permutations(range(0, sizeof($components) - 1),
+    $indicesList = Util::permutations(range(0, sizeof($components) - 1),
                                       sizeof($components));
     foreach ($indicesList as $i => $indices) {
       $routeName = "get_$i";
-      $parts = array_map(function ($i) { return $components[$i]; }, $indices);
+      $parts = array_map(
+        function ($i) use ($components) {
+          return $components[$i];
+        },
+        $indices);
       $path = '';
       $defaults = array( '_controller' => $controller );
       $requirements = array();
@@ -66,5 +70,9 @@ class ScoresGetLoader extends Loader {
 
     $this->loaded = true;
     return $routes;
+  }
+
+  public function supports($resource, $type = null) {
+    return $type === 'scoresGet';
   }
 }
