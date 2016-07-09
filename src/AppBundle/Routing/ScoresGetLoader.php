@@ -20,12 +20,12 @@ class ScoresGetLoader extends Loader {
     // We have four path components which can occur in any order and all map
     // to the same controller. We use this loader to automatically compose 
     // these components and programatically build all routes.
-    $controller = 'AppBundle:ScoresGetController:get';
+    $controller = 'AppBundle:ScoresGet:get';
 
     $components = array(
       array(
         'path' => '/num/{n}',
-        'defaults' => array( 'n' => '10' ),
+        'defaults' => array( 'n' => 10 ),
         'requirements' => array( 'n' => '\d+' )
       ),
       array(
