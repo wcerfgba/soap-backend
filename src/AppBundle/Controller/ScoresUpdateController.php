@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Util;
@@ -63,10 +64,14 @@ class ScoresUpdateController extends Controller {
   }
 
   /**
-   * @Route("/score/{id}")
-   * @Method({"DELETE"})
+   * @Route("/delete/{id}", name="deleteScore")
+   * @Security("has_role('ROLE_ADMIN')")
    */
   public function deleteAction($id) {
-
+    $em = $this->getDoctrine()->getManager();
+    $score = $em->getRepository('AppBundle:Score')->find($id);
+    $em->remove($score);
+    $em->flush();
+    return $this->redirectToRoute('homepage');
   }
 } 

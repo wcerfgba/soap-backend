@@ -4,9 +4,23 @@
   <div class="section">
     <h2>Scores</h2>
     <table class="results-table">
-      <tr><th>Rank</th><th>Name</th><th>Difficulty</th><th>Score</th></tr>
+      <tr>
+        <th>Rank</th><th>Name</th><th>Difficulty</th><th>Score</th>
+        {% if is_granted('ROLE_ADMIN') %}
+          <th>Delete</th>
+        {% endif %}
+      </tr>
       {% for rank, result in results %}
-        <tr><td>{{ rank + 1 }}</td><td>{{ result.name }}</td><td>{{ result.difficulty|capitalize }}</td><td>{{ result.score }}</td></tr>
+        <tr>
+          <td>{{ rank + 1 }}</td><td>{{ result.name }}</td><td>{{ result.difficulty|capitalize }}</td><td>{{ result.score }}</td>
+          {% if is_granted('ROLE_ADMIN') %}
+            <td>
+              <form action="{{ path('deleteScore', { 'id': result.id }) }}" method="get">
+                <button type="submit">x</button>
+              </form>
+            </td>
+          {% endif %}
+        </tr>
       {% endfor %}
     </table>
   </div>
