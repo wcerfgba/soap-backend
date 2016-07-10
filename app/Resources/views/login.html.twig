@@ -1,0 +1,6 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<p>Logged in as {{ app.user.username }}</p>
+<a href="{{ path('homepage') }}">Go home</a>
+{% endblock %}
