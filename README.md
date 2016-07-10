@@ -47,6 +47,11 @@ All endpoints return a HTML document by default, but if the header
 `Accept: application/json`
 is set then a JSON array is returned instead.
 
+Additionally, there is an authentication endpoint at `/login` to which admin 
+users can navigate to trigger a HTTP Basic Auth request to log themselves into 
+the site (hint: the details are `admin:admin`). Once authenticated, the scores 
+display will have a delete column to permit easy removal of scores.
+
 
 ## Notes
 
