@@ -6,8 +6,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\FOSRestController;
 
-class DefaultController extends Controller
+class DefaultController extends FOSRestController
 {
     /**
      * @Route("/", name="homepage")
@@ -22,8 +23,9 @@ class DefaultController extends Controller
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function loginAction(Request $request) {
-      $format = $request->getRequestFormat();
-
-      return $this->render("login.$format.twig");
+      $data = array( 'user' => $this->getUser()->getUsername() );
+      $view = $this->view($data, 200)
+                ->setTemplate('login.html.twig');
+      return $this->handleView($view);
     }
 }

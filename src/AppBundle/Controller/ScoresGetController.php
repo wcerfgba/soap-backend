@@ -6,8 +6,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\FOSRestController;
 
-class ScoresGetController extends Controller {
+class ScoresGetController extends FOSRestController {
   /**
    * @Route("/filter", name="filterFormHandler")
    * @Method({"GET"})
@@ -31,8 +32,6 @@ class ScoresGetController extends Controller {
   }
 
   public function getAction($n = 10, $name = '', $difficulty = '', $sort_field = 'score', Request $request) {
-    $format = $request->getRequestFormat();
-
     $repository = $this->getDoctrine()->getRepository('AppBundle:Score');
 
     // Query the top n results first. This sets up the rank as the keys and 
@@ -68,8 +67,8 @@ class ScoresGetController extends Controller {
       } 
     });
 
-    return $this->render("results.$format.twig", array(
-      'results' => $results
-    ));
+    $view = $this->view($results, 200)
+              ->setTemplate('results.html.twig');
+    return $this->handleView($view);
   }
 } 

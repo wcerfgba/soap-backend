@@ -9,58 +9,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Util;
 use AppBundle\Entity\Score;
+use AppBundle\Form\ScoreType;
 use Doctrine\ORM\ORMException;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\View\View;
 
-class ScoresUpdateController extends Controller {
-  /**
-   * @Route("/score", name="newScoreForm")
-   * @Method({"GET"})
-   */
-  public function getAction() {
-    return $this->render('postForm.html.twig');
-  }
-
+class ScoresUpdateController extends FOSRestController {
   /**
    * @Route("/score", name="newScore")
-   * @Method({"POST"})
    */
   public function postAction(Request $request) {
-    $format = $request->getRequestFormat();
-
-    $params = array( 'name', 'difficulty', 'score' );
-
-    foreach ($params as $param) {
-      if (!$request->request->has($param)) {
-       return new Response(
-        $this->renderView("error.$format.twig", array(
-          'error' => "Unspecified field: $param"
-        )),
-        400);
-      }
-    }
-        
-    $name = $request->request->get('name'); 
-    $difficulty = $request->request->get('difficulty'); 
-    $scoreVal = $request->request->get('score');
-
     $score = new Score();
-    try {
-      $score->setName($name);
-      $score->setDifficulty($difficulty);
-      $score->setScore($scoreVal);
-    } catch (ORMException $e) {
-      return new Response(
-       $this->renderView("error.$format.twig", array(
-         'error' => "Validation error: {$e->getMessage()}"
-       )),
-       400);
+    $form = $this->createForm(ScoreType::class, $score);
+    $form->handleRequest($request);
+
+    if ($form->isValid()) {
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($score);
+      $em->flush();
+
+      $view = $this->view(null, 200)
+                ->setTemplate('postSuccess.html.twig');
+      return $this->handleView($view);
     }
 
-    $em = $this->getDoctrine()->getManager();
-    $em->persist($score);
-    $em->flush();
-
-    return $this->render("postSuccess.$format.twig");
+    $view = $this->view($form, 400)
+              ->setTemplate('postForm.html.twig');
+    return $this->handleView($view);
   }
 
   /**
@@ -70,8 +45,16 @@ class ScoresUpdateController extends Controller {
   public function deleteAction($id) {
     $em = $this->getDoctrine()->getManager();
     $score = $em->getRepository('AppBundle:Score')->find($id);
+    if ($score === null) {
+      $view = $this->view(array( 'error' => "Score with $id not found." ), 400)
+                ->setTemplate('error.html.twig');
+      return $this->handleView($view);
+    }
     $em->remove($score);
     $em->flush();
-    return $this->redirectToRoute('homepage');
+
+    $view = $this->view(null, 200)
+              ->setTemplate('deleteSuccess.html.twig');
+    return $this->handleView($view);
   }
 } 
