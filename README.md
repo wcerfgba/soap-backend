@@ -35,7 +35,7 @@ All above **GET** endpoints are composable, so you can query for
 `/difficulty/hard/num/20/sort_by/name`
 to get the top 20 scores for hard mode, sorted by name.
 
-* **GET** `/score` - Retrieves a form or submitting a new score.
+* **GET** `/score` - Retrieves a form for submitting a new score.
 * **POST** `/score` - Accepts `name`, `difficulty`, and `score` as POST 
   parameters and adds the score to the database.
 * **ANY** `/delete/:id` - Deletes the score with ID `id`. This requires that 
