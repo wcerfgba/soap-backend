@@ -11,9 +11,16 @@ use AppBundle\Entity\Score;
 use Doctrine\ORM\ORMException;
 
 class ScoresUpdateController extends Controller {
+  /**
+   * @Route("/score", name="newScoreForm")
+   * @Method({"GET"})
+   */
+  public function getAction() {
+    return $this->render('postForm.html.twig');
+  }
 
   /**
-   * @Route("/score")
+   * @Route("/score", name="newScore")
    * @Method({"POST"})
    */
   public function postAction(Request $request) {
@@ -39,7 +46,7 @@ class ScoresUpdateController extends Controller {
     try {
       $score->setName($name);
       $score->setDifficulty($difficulty);
-      $score->setScore($score);
+      $score->setScore($scoreVal);
     } catch (ORMException $e) {
       return new Response(
        $this->renderView("error.$format.twig", array(
