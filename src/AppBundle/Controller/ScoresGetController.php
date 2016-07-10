@@ -3,10 +3,36 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class ScoresGetController extends Controller {
+  /**
+   * @Route("/filter", name="filterFormHandler")
+   * @Method({"GET"})
+   *
+   * Translates query parameters from a form into an API URL and redirects the 
+   * client.
+   */
+  public function formHandlerAction(Request $request) {
+    $fields = array( 'num' => 10, 'name' => '', 'difficulty' => '',
+                     'sort_by' => 'score' );
+    $path = '';
+    foreach ($fields as $field => $default) {
+      $val = $request->query->get($field, $default);
+
+      if ($val) {
+        $path .= "/$field/$val";
+      }
+    }
+
+    return $this->redirect($path);
+  }
+
+  /**
+   * @Method({"GET"})
+   */
   public function getAction($n = 10, $name = '', $difficulty = '', $sort_field = 'score', Request $request) {
     $format = $request->getRequestFormat();
 
