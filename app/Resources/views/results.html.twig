@@ -10,7 +10,7 @@
           <th>Delete</th>
         {% endif %}
       </tr>
-      {% for rank, result in results %}
+      {% for rank, result in data %}
         <tr>
           <td>{{ rank + 1 }}</td><td>{{ result.name }}</td><td>{{ result.difficulty|capitalize }}</td><td>{{ result.score }}</td>
           {% if is_granted('ROLE_ADMIN') %}
@@ -56,6 +56,6 @@
     </form>
   </div>
   <div class="section">
-    <p>or <a href="{{ path('newScoreForm') }}">submit a new score</a>.</p>
+    <p>or <a href="{{ path('newScore') }}">submit a new score</a>.</p>
   </div>
 {% endblock %}

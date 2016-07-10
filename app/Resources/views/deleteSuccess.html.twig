@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-{% for key, error in data %}
-<p>{{ key }} : {{ error }}</p>
-{% endfor %}
+<p>Score deleted successfully.</p>
 <a href="{{ path('homepage') }}">Go home</a>
 {% endblock %}
