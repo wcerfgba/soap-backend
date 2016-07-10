@@ -31,8 +31,10 @@ is not part of the data model.
 * **GET** `/sort_by/:sort_field` - Sort the results by a specified field. Valid 
   fields are `name`, `difficulty`, and `score`.
 
-All above **GET** endpoints are composable, so you can query for
+All above **GET** endpoints are arbitrarily composable, so you can query for
 `/difficulty/hard/num/20/sort_by/name`
+or
+`/num/20/sort_by/name/difficulty/hard`
 to get the top 20 scores for hard mode, sorted by name.
 
 * **GET** `/score` - Retrieves a form for submitting a new score.
