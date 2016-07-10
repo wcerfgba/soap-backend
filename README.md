@@ -4,6 +4,11 @@ soap-backend
 My implementation of the Soap Media high-scores backend work sample.
 
 
+## How to use
+
+Clone the repo and run `php bin/console server:start`.
+
+
 ## Data model
 
 1. Name
@@ -30,9 +35,10 @@ All above **GET** endpoints are composable, so you can query for
 `/difficulty/hard/num/20/sort_by/name`
 to get the top 20 scores for hard mode, sorted by name.
 
+* **GET** `/score` - Retrieves a form or submitting a new score.
 * **POST** `/score` - Accepts `name`, `difficulty`, and `score` as POST 
   parameters and adds the score to the database.
-* **DELETE** `/score/:id` - Deletes the score with ID `id`. This requires that 
+* **ANY** `/delete/:id` - Deletes the score with ID `id`. This requires that 
   the user is authenticated as an admin.
 
 All endpoints return a HTML document by default, but if the header
@@ -54,3 +60,6 @@ is set then a JSON array is returned instead.
    of function `ScoresGetController::getAction`, because for some reason the 
    default values specified on the routes were not being carried forward to the 
    controller. I am not currently sure why this is.
+
+3. At commit `2a6d5e` the endpoint `DELETE /score/:id` was changed to support 
+   any HTTP method, because HTML forms do not support the DELETE method (gah).
