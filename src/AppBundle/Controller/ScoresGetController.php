@@ -30,9 +30,6 @@ class ScoresGetController extends Controller {
     return $this->redirect($path);
   }
 
-  /**
-   * @Method({"GET"})
-   */
   public function getAction($n = 10, $name = '', $difficulty = '', $sort_field = 'score', Request $request) {
     $format = $request->getRequestFormat();
 
